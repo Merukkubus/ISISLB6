@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Microservices Dashboard</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    pre { background: #f4f4f4; padding: 10px; }
+  </style>
+</head>
+<body>
+  <h1>Microservices Status</h1>
+  <button onclick="loadAll()">Load All Services</button>
+  <div id="output"></div>
+
+  <script>
+    const services = [
+      { name: "auth", url: "/api/auth" },
+      { name: "user", url: "/api/user" },
+      { name: "product", url: "/api/product" },
+      { name: "order", url: "/api/order" }
+    ];
+
+    async function loadAll() {
+      const output = document.getElementById('output');
+      output.innerHTML = '';
+      for (const service of services) {
+        try {
+          const res = await fetch(service.url);
+          const data = await res.json();
+          output.innerHTML += `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        } catch (err) {
+          output.innerHTML += `<pre>${service.name}: ❌ UNAVAILABLE</pre>`;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
